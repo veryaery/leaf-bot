@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/xynfa/leaf-bot/issues"
   },
-  "homepage": "https://github.com/xynfa/leaf-bot#readme"
+  "homepage": "https://github.com/xynfa/leaf-bot#readme",
+  "dependencies": {
+    "chalk": "^2.3.2"
+  }
 }
