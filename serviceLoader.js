@@ -67,13 +67,12 @@ async function load() {
         for (const rank of ranked.reverse()) {
             const promises = [];
 
-            logger.log("loading ", ...rank.reduce((acc, cur) => acc.length > 0 ? [ ...acc, ", ", cur.name ] : [ cur.name ], []));
-
             for (const service of rank) {
                 if (service.defaults) {
                     const options = {};
-                    options[`configs/${service.name}.json`] = service.defaults;
-                    const config = xyncl(options);
+                    const name = service.name;
+                    options[`configs/${name}.json`] = service.defaults;
+                    const config = (await xyncl(options))[name];
 
                     promises.push(service.load(config));
                 } else {
@@ -82,6 +81,8 @@ async function load() {
             }
 
             await Promise.all(promises);
+
+            logger.log("loaded ", ...rank.reduce((acc, cur) => acc.length > 0 ? [ ...acc, ", ", cur.name ] : [ cur.name ], []));
         }
     });
 }
