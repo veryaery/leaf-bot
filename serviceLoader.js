@@ -10,17 +10,16 @@ const xyncl = require("xyncl");
 const Logger = require("./classes/Logger.js");
 
 const directory = "services";
-const logger = new Logger("services", "cyan");
+const logger = new Logger("service loader", "cyan");
 let services = [];
 
 function readServices() {
     return new Promise((resolve, reject) => {
         const services = [];
-        fs.readdir(directory, (error, files) => {
-            for (const key of files) {
-                const service = require(path.join(__dirname, directory, key));
 
-                services.push(new service());
+        fs.readdir(directory, (error, files) => {
+            for (const file of files) {
+                services.push(new (require(path.join(process.cwd(), directory, file)))());
             }
 
             resolve(services);

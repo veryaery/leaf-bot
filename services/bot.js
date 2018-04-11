@@ -13,7 +13,7 @@ class Bot extends Service {
     }
 
     load(config) {
-        console.log("bot", config);
+        
     }
 
 }
