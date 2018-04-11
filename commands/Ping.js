@@ -5,6 +5,8 @@ class Ping extends Command {
 
     constructor() {
         super("ping");
+
+        this.aliases = [ "p" ];
     }
 
     execute(output, message, client) {

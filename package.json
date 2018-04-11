@@ -18,6 +18,7 @@
   "homepage": "https://github.com/xynfa/leaf-bot#readme",
   "dependencies": {
     "chalk": "^2.3.2",
+    "discord.js": "^11.3.2",
     "promise": "^8.0.1",
     "xyncl": "^1.0.2",
     "xyncp": "^1.1.1"
