@@ -5,12 +5,15 @@ class Ping extends Command {
 
     constructor() {
         super("ping");
-
-        this.aliases = [ "p" ];
     }
 
     execute(output, message, client) {
-        message.channel.send("pong");
+        const past = Date.now();
+
+        message.channel.send("pong")
+            .then((message) => {
+                message.edit(`pong\n\nwebsocket: \`${client.ping}ms\`\nrest: \`${Date.now() - past}ms\``)
+            });
     }
 
 }

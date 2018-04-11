@@ -6,26 +6,46 @@ class Random extends Command {
     constructor() {
         super("random");
 
+        this.args = [
+            new Argument("min")
+                .setType(new types.Num())
+                .setOptional(true),
+            new Argument("max")
+                .setType(new types.Num())
+                .setOptional(true)
+        ];
         this.options = {
             "--": [
-                new Option("min")
-                    .setArgs([
-                        new Argument("number")
-                            .setType(new types.Num())
-                    ]),
-                new Option("max")
-                    .setArgs([
-                        new Argument("number")
-                            .setType(new types.Num())
-                    ]),
                 new Option("float")
+                    .setAliases([ "f" ]),
+                new Option("count")
+                    .setAliases([ "c", "amount", "a" ])
+                    .setArgs([
+                        new Argument("number")
+                            .setType(new types.Num({
+                                min: 1,
+                                max: 10,
+                                integer: true
+                            }))
+                    ])
             ]
         }
-        this.aliases = [ "rand", "rnd", "r", "gen" ];
+        this.aliases = [ "rand", "rnd", "gen" ];
     }
 
     execute(output, message, client) {
-        message.channel.send(JSON.stringify(output));
+        const min = output.arguments.min === undefined ? 1 : output.arguments.min;
+        const max = output.arguments.max === undefined ? 10 : output.arguments.max;
+        const count = output.options.count ? output.options.count.number : 1;
+        const values = [];
+
+        for (let i = 0; i < count; i++) {
+            const value = (Math.random() * (max - min)) + min;
+
+            values.push(output.options.float ? value : Math.round(value));
+        }
+
+        message.channel.send(values.join("\n"));
     }
 
 }

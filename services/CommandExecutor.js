@@ -1,5 +1,6 @@
 // community modules
 const { Parser } = require("xyncp");
+const Discord = require("discord.js");
 
 // imports
 const Service = require("../classes/Service.js");
@@ -31,9 +32,20 @@ class CommandExecutor extends Service {
                 parser.parse(message.content, {})
                     .then(result => {
                         if (result.command != parser) {
-                            result.command.execute(result.output, message, Bot.client);
+                            if (result.error) {
+                                message.channel.send({
+                                    embed: new Discord.RichEmbed()
+                                        .setTitle("syntax error")
+                                        .setDescription(result.error.message)
+                                        .setColor(0xff0000)
+                                });
 
-                            this._logger.log("", message.member.displayName, " executed command ", result.command.name);
+                                this._logger.log("", message.member.displayName, " failed to execute command ", result.command.name);
+                            } else {
+                                result.command.execute(result.output, message, Bot.client);
+    
+                                this._logger.log("", message.member.displayName, " successfully executed command ", result.command.name);
+                            }
                         }
                     })
                     .catch(console.error);
