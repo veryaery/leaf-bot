@@ -32,12 +32,14 @@ class CommandExecutor extends Service {
                 parser.parse(message.content, {})
                     .then(result => {
                         if (result.command != parser) {
+                            message.react("🍃");
+
                             if (result.error) {
                                 message.channel.send({
                                     embed: new Discord.RichEmbed()
                                         .setTitle("syntax error")
                                         .setDescription(result.error.message)
-                                        .setColor(0xff0000)
+                                        .setColor(0x00ff99)
                                 });
 
                                 this._logger.log("", message.member.displayName, " failed to execute command ", result.command.name);
