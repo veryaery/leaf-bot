@@ -35,7 +35,7 @@ class Random extends Command {
         const values = [];
 
         for (let i = 0; i < count; i++) {
-            const value = (Math.random() * (output.args.max - (output.args.min + 1))) + output.args.min;
+            const value = (Math.random() * ((output.args.max + 1) - output.args.min)) + output.args.min;
 
             values.push(output.options.float ? value : Math.floor(value));
         }
