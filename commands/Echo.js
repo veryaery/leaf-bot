@@ -14,7 +14,7 @@ class Echo extends Command {
     }
 
     execute(output, message, client) {
-        message.channel.send(output.arguments.message);
+        message.channel.send(output.args.message);
     }
 
 }

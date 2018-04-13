@@ -10,9 +10,9 @@ class Ping extends Command {
     execute(output, message, client) {
         const past = Date.now();
 
-        message.channel.send("pong")
+        message.channel.send("🏓 ping")
             .then((message) => {
-                message.edit(`pong\n\nwebsocket: \`${client.ping}ms\`\nrest: \`${Date.now() - past}ms\``)
+                message.edit(`🏓 pong\n\nwebsocket: \`${Math.round(client.ping)}ms\`\nrest: \`${Date.now() - past}ms\``)
             });
     }
 

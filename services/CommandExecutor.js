@@ -28,8 +28,10 @@ class CommandExecutor extends Service {
             .setSeparators([ " " ]);
 
         Bot.client.on("message", (message) => {
-            if (message.author.id != Bot.client.id) {
-                parser.parse(message.content, {})
+            if (message.author.id != Bot.client.user.id) {
+                parser.parse(message.content, {
+                    message: message
+                })
                     .then(result => {
                         if (result.command != parser) {
                             message.react("🍃");

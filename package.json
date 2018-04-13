@@ -19,8 +19,9 @@
   "dependencies": {
     "chalk": "^2.3.2",
     "discord.js": "^11.3.2",
+    "noisejs": "^2.1.0",
     "promise": "^8.0.1",
     "xyncl": "^1.0.2",
-    "xyncp": "^1.1.5"
+    "xyncp": "^1.2.0"
   }
 }

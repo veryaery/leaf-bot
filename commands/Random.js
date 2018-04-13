@@ -34,8 +34,8 @@ class Random extends Command {
     }
 
     execute(output, message, client) {
-        const min = output.arguments.min === undefined ? 1 : output.arguments.min;
-        const max = output.arguments.max === undefined ? 10 : output.arguments.max;
+        const min = output.args.min === undefined ? 1 : output.args.min;
+        const max = output.args.max === undefined ? 10 : output.args.max;
         const count = output.options.count ? output.options.count.number : 1;
         const values = [];
 

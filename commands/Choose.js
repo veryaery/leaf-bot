@@ -1,7 +1,7 @@
 // community modules
 const { Command, Argument, types } = require("xyncp");
 
-class Ball extends Command {
+class Choose extends Command {
 
     constructor() {
         super("choose");
@@ -15,10 +15,10 @@ class Ball extends Command {
     }
 
     execute(output, message, client) {
-        message.channel.send(`🤔 ${output.arguments.options[Math.floor(Math.random() * output.arguments.options.length)]}`);
+        message.channel.send(`🤔 ${output.args.options[Math.floor(Math.random() * output.args.options.length)]}`);
     }
 
 }
 
 // exports
-module.exports = Ball;
+module.exports = Choose;
