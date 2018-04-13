@@ -64,24 +64,6 @@ class CommandLoader extends Service {
             } catch (error) {
                 reject(error);
             }
-            /*
-            const directory = "commands";
-            const commands = [];
-
-            fs.readdir(directory, (error, files) => {
-                for (const file of files) {
-                    const command = new (require(path.join(process.cwd(), directory, file)))();
-                    
-                    commands.push(command);
-
-                    this._logger.log("loaded ", command.name);
-                }
-
-                CommandLoader.commands = commands;
-
-                resolve();
-            });
-            */
         });
     }
 

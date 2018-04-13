@@ -1,20 +1,21 @@
 // community modules
 const { Command, Option, Argument, types } = require("xyncp");
 
-class Random extends Command {
+class Dice extends Command {
 
     constructor() {
-        super("random");
+        super("dice");
 
         this.args = [
-            new Argument("min")
-                .setType(new types.Num()),
-            new Argument("max")
-                .setType(new types.Num())
+            new Argument("sides")
+                .setType(new types.Num({
+                    min: 1,
+                    integer: true
+                }))
+                .setOptional(true)
         ];
         this.options = {
             "--": [
-                new Option("float"),
                 new Option("count")
                     .setAliases([ "amount" ])
                     .setArgs([
@@ -27,17 +28,15 @@ class Random extends Command {
                     ])
             ]
         }
-        this.aliases = [ "rand", "rnd", "gen" ];
     }
 
     execute(output, message, client) {
-        const count = output.options.count ? output.options.count.count : 1;
+        const sides = output.args.sides === undefined ? 6 : output.args.sides;
+        const count = output.options.count === undefined ? 1 : output.options.count.count;
         const values = [];
 
         for (let i = 0; i < count; i++) {
-            const value = (Math.random() * (output.args.max - (output.args.min + 1))) + output.args.min;
-
-            values.push(output.options.float ? value : Math.floor(value));
+            values.push(`🎲 ${Math.floor(Math.random() * sides) + 1}`);
         }
 
         message.channel.send(values.join("\n"));
@@ -46,4 +45,4 @@ class Random extends Command {
 }
 
 // exports
-module.exports = Random;
+module.exports = Dice;

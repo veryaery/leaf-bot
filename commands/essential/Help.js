@@ -1,9 +1,8 @@
 // community modules
-const { Command } = require("xyncp");
+const { Command, Option } = require("xyncp");
 const Discord = require("discord.js");
 
 // imports
-const Bot = require("../../services/Bot.js");
 const CommandLoader = require("../../services/CommandLoader.js");
 
 class Ping extends Command {
@@ -11,6 +10,12 @@ class Ping extends Command {
     constructor() {
         super("help");
 
+        this.options = {
+            "--": [
+                new Option("direct")
+                    .setAliases([ "dm", "private", "pm" ])
+            ]
+        }
         this.aliases = [ "commands" ];
     }
 
@@ -70,22 +75,28 @@ class Ping extends Command {
     }
 
     async execute(output, message, client) {
-        await message.channel.send({
+        const channel = output.options.direct ? message.author : message.channel;
+
+        await channel.send({
             embed: new Discord.RichEmbed()
                 .setTitle("🍃")
-                .setDescription(" hi~!\ni'm leaf, a private discord bot developed by xynfa\n\nyou can view my source code in my [github repository](https://github.com/xynfa/leaf-bot)")
-                .setThumbnail(Bot.client.user.displayAvatarURL)
+                .setDescription(" hi~!\ni'm leaf, a private discord bot developed by xynfa\n\nyou can view my source code at my [github repository](https://github.com/xynfa/leaf-bot)")
+                .setThumbnail(client.user.displayAvatarURL)
                 .setColor(0x00ff99)
         });
 
         for (const catagory of CommandLoader.catagories.sort((x, y) => x.position - y.position)) {
-            await message.channel.send({
+            await channel.send({
                 embed: new Discord.RichEmbed()
                     .setTitle(catagory.name)
                     .setDescription(`${catagory.description}\n\n${this._stringify(CommandLoader.catagorizedCommands[catagory.name]).join("\n")}`)
                     .setFooter("(required) [optional]")
                     .setColor(catagory.color)
             });
+        }
+
+        if (output.options.direct) {
+            message.channel.send("📬 help sent to your dms");
         }
     }
 

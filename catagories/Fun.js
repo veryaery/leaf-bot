@@ -7,11 +7,8 @@ class Fun extends Catagory {
         super("fun");
 
         this.description = "commands to brighten up your server";
+        this.color = 0xff3399;
         this.position = 2;
-    }
-
-    get color() {
-        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
     }
 
 }
