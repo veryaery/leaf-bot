@@ -98,6 +98,10 @@ class Mention extends Type {
         });
     }
 
+    toString() {
+        return `mention<${this._type}>`;
+    }
+
 }
 
 // defaults

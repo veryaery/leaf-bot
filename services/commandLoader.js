@@ -14,6 +14,9 @@ class CommandLoader extends Service {
     constructor() {
         super("commandLoader");
 
+        this.defaults = {
+            prefix: "//"
+        };
         this._logger = new Logger("command loader", "cyan");
     }
 
@@ -43,19 +46,19 @@ class CommandLoader extends Service {
 
                 for (const catagory of CommandLoader.catagories) {
                     try {
-                        const name = catagory.name;
-                        const catagoryCommands = await this._load(path.join("commands", name));
+                        const catagoryCommands = await this._load(path.join("commands", catagory.name));
 
-                        this._logger.log("loaded ", name, " with ", catagoryCommands.length, " commands");
+                        this._logger.log("loaded ", catagory.name, " with ", catagoryCommands.length, " commands");
 
-                        CommandLoader.catagorizedCommands[name] = catagoryCommands;
+                        CommandLoader.catagorizedCommands[catagory.name] = {};
+                        CommandLoader.catagorizedCommands[catagory.name][config.prefix] = catagoryCommands;
                         commands = commands.concat(catagoryCommands);
                     } catch (error) {
                         reject(error);
                     }
                 }
 
-                CommandLoader.commands = commands;
+                CommandLoader.commands[config.prefix] = commands;
 
                 resolve();
             } catch (error) {
@@ -86,7 +89,7 @@ class CommandLoader extends Service {
 
 // statics
 CommandLoader.catagories = [];
-CommandLoader.commands = [];
+CommandLoader.commands = {};
 CommandLoader.catagorizedCommands = {};
 
 // exports

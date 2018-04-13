@@ -28,13 +28,12 @@ class Penis extends Command {
         const seed = methods.numberize(member.id);
         const size = Math.round(((Math.abs(this._noise.simplex2(Date.now() / 1000000, seed)) * (this._max - this._min)) + this._min) * 10) / 10;
 
-        let penis = "B";
+        let penis = "";
         for (let i = 0; i < size; i += 2) {
             penis += "=";
         }
-        penis += "D";
 
-        message.channel.send(`${penis} \`${size}cm\` (\`${(Math.round((size * 0.393701) * 10)) / 10}'\`)`)
+        message.channel.send(`B${penis}D \`${size}cm\` (\`${(Math.round((size * 0.393701) * 10)) / 10}'\`)`)
     }
 
 }

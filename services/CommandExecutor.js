@@ -14,17 +14,12 @@ class CommandExecutor extends Service {
         super("commandExecutor");
 
         this.dependencies = [ "bot", "commandLoader" ];
-        this.defaults = {
-            prefix: "//"
-        };
         this._logger = new Logger("command executor", "green");
     }
 
     load(config) {
-        const commands = {};
-        commands[config.prefix] = CommandLoader.commands;
         const parser = new Parser()
-            .setCommands(commands)
+            .setCommands(CommandLoader.commands)
             .setSeparators([ " " ]);
 
         Bot.client.on("message", (message) => {

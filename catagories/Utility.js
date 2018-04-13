@@ -6,8 +6,8 @@ class Utility extends Catagory {
     constructor() {
         super("utility");
 
-        this.description = "commands that make your everyday discord life slightly easier";
-        this.color = 0x33cc33;
+        this.description = "commands to make your everyday discord life slightly easier";
+        this.color = 0x0099ff;
         this.position = 1;
     }
 
