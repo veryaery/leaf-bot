@@ -7,7 +7,7 @@ const { Command, Argument, types } = require("xyncp");
 const Discord = require("discord.js");
 
 // imports
-const Mention = require("../types/Mention.js");
+const Mention = require("../../types/Mention.js");
 
 class Avatar extends Command {
 

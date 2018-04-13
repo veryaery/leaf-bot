@@ -4,8 +4,8 @@ const Discord = require("discord.js");
 const { Noise } = require("noisejs");
 
 // imports
-const Mention = require("../types/Mention.js");
-const methods = require("../methods.js");
+const Mention = require("../../types/Mention.js");
+const methods = require("../../methods.js");
 
 class Penis extends Command {
 

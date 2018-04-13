@@ -17,8 +17,51 @@ class CommandLoader extends Service {
         this._logger = new Logger("command loader", "cyan");
     }
 
-    load(config) {
+    _load(directory) {
         return new Promise((resolve, reject) => {
+            const output = [];
+
+            fs.readdir(directory, (error, files) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    for (const file of files) {
+                        output.push(new (require(path.join(process.cwd(), directory, file)))());
+                    }
+
+                    resolve(output);
+                }
+            });
+        });
+    }
+
+    async load(config) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                CommandLoader.catagories = await this._load("catagories");
+                let commands = [];
+
+                for (const catagory of CommandLoader.catagories) {
+                    try {
+                        const name = catagory.name;
+                        const catagoryCommands = await this._load(path.join("commands", name));
+
+                        this._logger.log("loaded ", name, " with ", catagoryCommands.length, " commands");
+
+                        CommandLoader.catagorizedCommands[name] = catagoryCommands;
+                        commands = commands.concat(catagoryCommands);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+
+                CommandLoader.commands = commands;
+
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+            /*
             const directory = "commands";
             const commands = [];
 
@@ -35,13 +78,16 @@ class CommandLoader extends Service {
 
                 resolve();
             });
+            */
         });
     }
 
 }
 
 // statics
+CommandLoader.catagories = [];
 CommandLoader.commands = [];
+CommandLoader.catagorizedCommands = {};
 
 // exports
 module.exports = CommandLoader;
