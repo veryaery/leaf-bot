@@ -17,23 +17,24 @@ class RockPaperScissors extends Command {
             scissors: 2
         };
         this._emojis = {
-            0: ":moyai:",
-            1: ":scroll:",
-            2: ":scissors:"
+            0: "🗿",
+            1: "📄",
+            2: "✂"
         };
     }
 
     execute(output, message, client) {
         const botChoice = Math.floor(Math.random() * 3);
         const playerChoice = this._values[output.args.choice];
-        const emoji = this._emojis[botChoice];
+        const botEmoji = this._emojis[botChoice];
+        const playerEmoji = this._emojis[playerChoice];
 
         if ((botChoice + 1) % 3 == playerChoice) {
-            message.channel.send(`${emoji} you win`);
+            message.channel.send(`${playerEmoji}💥${botEmoji} you win`);
         } else if ((playerChoice + 1) % 3 == botChoice) {
-            message.channel.send(`${emoji} you lose`);
+            message.channel.send(`${playerEmoji}💥${botEmoji} you lose`);
         } else {
-            message.channel.send(`${emoji} we tie`);
+            message.channel.send(`${playerEmoji}💥${botEmoji} we tie`);
         }
     }
 

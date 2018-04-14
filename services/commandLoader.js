@@ -18,6 +18,9 @@ class CommandLoader extends Service {
             prefix: "//"
         };
         this._logger = new Logger("command loader", "cyan");
+        this.catagories = [];
+        this.commands = {};
+        this.catagorizedCommands = {};
     }
 
     _load(directory) {
@@ -41,24 +44,24 @@ class CommandLoader extends Service {
     async load(config) {
         return new Promise(async (resolve, reject) => {
             try {
-                CommandLoader.catagories = await this._load("catagories");
+                this.catagories = await this._load("catagories");
                 let commands = [];
 
-                for (const catagory of CommandLoader.catagories) {
+                for (const catagory of this.catagories) {
                     try {
                         const catagoryCommands = await this._load(path.join("commands", catagory.name));
 
                         this._logger.log("loaded ", catagory.name, " with ", catagoryCommands.length, " commands");
 
-                        CommandLoader.catagorizedCommands[catagory.name] = {};
-                        CommandLoader.catagorizedCommands[catagory.name][config.prefix] = catagoryCommands;
+                        this.catagorizedCommands[catagory.name] = {};
+                        this.catagorizedCommands[catagory.name][config.prefix] = catagoryCommands;
                         commands = commands.concat(catagoryCommands);
                     } catch (error) {
                         reject(error);
                     }
                 }
 
-                CommandLoader.commands[config.prefix] = commands;
+                this.commands[config.prefix] = commands;
 
                 resolve();
             } catch (error) {
@@ -68,11 +71,6 @@ class CommandLoader extends Service {
     }
 
 }
-
-// statics
-CommandLoader.catagories = [];
-CommandLoader.commands = {};
-CommandLoader.catagorizedCommands = {};
 
 // exports
 module.exports = CommandLoader;

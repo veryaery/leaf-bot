@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/xynfa/leaf-bot#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "chalk": "^2.3.2",
     "discord.js": "^11.3.2",
     "noisejs": "^2.1.0",

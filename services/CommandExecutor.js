@@ -5,8 +5,6 @@ const Discord = require("discord.js");
 // imports
 const Service = require("../classes/Service.js");
 const Logger = require("../classes/Logger.js");
-const CommandLoader = require("../services/CommandLoader.js");
-const Bot = require("../services/Bot.js");
 
 class CommandExecutor extends Service {
 
@@ -15,15 +13,18 @@ class CommandExecutor extends Service {
 
         this.dependencies = [ "bot", "commandLoader" ];
         this._logger = new Logger("command executor", "green");
+        this._services = {};
     }
 
     load(config) {
+        this._services = require("../serviceLoader.js").services;
+        
         const parser = new Parser()
-            .setCommands(CommandLoader.commands)
+            .setCommands(this._services.commandLoader.commands)
             .setSeparators([ " " ]);
 
-        Bot.client.on("message", (message) => {
-            if (message.author.id != Bot.client.user.id) {
+        this._services.bot.client.on("message", (message) => {
+            if (message.author.id != this._services.bot.client.user.id) {
                 parser.parse(message.content, {
                     message: message
                 })
@@ -41,7 +42,7 @@ class CommandExecutor extends Service {
 
                                 this._logger.log("", message.member.displayName, " failed to execute command ", result.command.name);
                             } else {
-                                result.command.execute(result.output, message, Bot.client);
+                                result.command.execute(result.output, message, this._services.bot.client);
     
                                 this._logger.log("", message.member.displayName, " successfully executed command ", result.command.name);
                             }

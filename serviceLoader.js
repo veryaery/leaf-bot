@@ -11,15 +11,16 @@ const Logger = require("./classes/Logger.js");
 
 const directory = "services";
 const logger = new Logger("service loader", "cyan");
-let services = [];
 
 function readServices() {
     return new Promise((resolve, reject) => {
-        const services = [];
+        const services = {};
 
         fs.readdir(directory, (error, files) => {
             for (const file of files) {
-                services.push(new (require(path.join(process.cwd(), directory, file)))());
+                const service = new (require(path.join(process.cwd(), directory, file)))();
+
+                services[service.name] = service;
             }
 
             resolve(services);
@@ -60,8 +61,10 @@ function rankServices(services) {
 
 async function load() {
     return new Promise(async (resolve, reject) => {
-        services = await readServices();
-        const ranked = rankServices(services);
+        const services = await readServices();
+        const ranked = rankServices(Object.values(services));
+        
+        exports.services = services;
 
         for (const rank of ranked.reverse()) {
             const promises = [];
@@ -88,4 +91,4 @@ async function load() {
 
 // exports
 exports.load = load;
-exports.services = services;
+exports.services = {};

@@ -16,6 +16,7 @@ class Bot extends Service {
             token: ""
         };
         this._logger = new Logger("bot", "magenta");
+        this.client = null;
     }
 
     load(config) {
@@ -25,7 +26,7 @@ class Bot extends Service {
             client.on("ready", () => {
                 this._logger.log("ready");
 
-                Bot.client = client;
+                this.client = client;
 
                 resolve();
             });

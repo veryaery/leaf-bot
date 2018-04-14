@@ -3,7 +3,7 @@ const { Command, Option } = require("xyncp");
 const Discord = require("discord.js");
 
 // imports
-const CommandLoader = require("../../services/CommandLoader.js");
+const { commandLoader } = require("../../serviceLoader.js").services;
 
 class Ping extends Command {
 
@@ -79,17 +79,17 @@ class Ping extends Command {
 
         await channel.send({
             embed: new Discord.RichEmbed()
-                .setTitle("🍃")
+                .setTitle("leaf")
                 .setDescription(" hi~!\ni'm leaf, a private discord bot developed by xynfa\n\nyou can view my source code at my [github repository](https://github.com/xynfa/leaf-bot)")
                 .setThumbnail(client.user.displayAvatarURL)
                 .setColor(0x00ff99)
         });
 
-        for (const catagory of CommandLoader.catagories.sort((x, y) => x.position - y.position)) {
+        for (const catagory of commandLoader.catagories.sort((x, y) => x.position - y.position)) {
             await channel.send({
                 embed: new Discord.RichEmbed()
                     .setTitle(catagory.name)
-                    .setDescription(`${catagory.description}\n\n${this._stringify(CommandLoader.catagorizedCommands[catagory.name]).join("\n")}`)
+                    .setDescription(`${catagory.description}\n\n${this._stringify(commandLoader.catagorizedCommands[catagory.name]).join("\n")}`)
                     .setFooter("(required) [optional]")
                     .setColor(catagory.color)
             });
