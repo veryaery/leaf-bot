@@ -53,17 +53,21 @@ class APICaller extends Service {
     }
 
     load(config) {
-        setInterval(() => {
-            if (this._queue.length > 0) {
-                const call = this._queue.pop();
-                
-                this.onCall(call.call)
-                    .then(call.resolve)
-                    .catch(call.reject);
-            } else {
-                this._instant = true;
-            }
-        }, config.interval);
+        return new Promise((resolve, reject) => {
+            setInterval(() => {
+                if (this._queue.length > 0) {
+                    const call = this._queue.pop();
+                    
+                    this.onCall(call.call)
+                        .then(call.resolve)
+                        .catch(call.reject);
+                } else {
+                    this._instant = true;
+                }
+            }, config.interval);
+
+            resolve();
+        });
     }
 
 }

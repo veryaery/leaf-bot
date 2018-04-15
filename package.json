@@ -22,6 +22,7 @@
     "discord.js": "^11.3.2",
     "noisejs": "^2.1.0",
     "promise": "^8.0.1",
+    "request": "^2.85.0",
     "xyncl": "^1.0.2",
     "xyncp": "^1.2.0"
   }

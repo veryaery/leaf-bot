@@ -12,7 +12,7 @@ class RedditCaller extends APICaller {
         super("redditCaller");
 
         this.defaults = {
-            interval: 5000,
+            ...this.defaults,
             cache: 60000
         };
         this._logger = new Logger("reddit", "red");
@@ -47,7 +47,7 @@ class RedditCaller extends APICaller {
     load(config) {
         this._config = config;
 
-        super.load(config);
+        return super.load(config);
     }
 
 }
