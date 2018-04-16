@@ -11,7 +11,7 @@ class Bot extends Service {
     constructor() {
         super("bot");
 
-        this.dependencies = [ "commandLoader" ];
+        this.dependencies = [ "commands" ];
         this.defaults = {
             token: ""
         };

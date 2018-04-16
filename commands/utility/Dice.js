@@ -28,6 +28,7 @@ class Dice extends Command {
                     ])
             ]
         }
+        this.aliases = [ "roll" ];
     }
 
     execute(output, message, client) {

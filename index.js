@@ -1,4 +1,4 @@
 // imports
-const serviceLoader = require("./serviceLoader.js");
+const services = require("./services.js");
 
-serviceLoader.load();
+services.load();

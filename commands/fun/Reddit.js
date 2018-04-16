@@ -7,7 +7,7 @@ const { Command, Argument, types } = require("xyncp");
 const Discord = require("discord.js");
 
 // imports
-const { redditCaller } = require("../../serviceLoader.js").services;
+const { redditCaller } = require("../../services.js").services;
 
 class Reddit extends Command {
 
