@@ -11,7 +11,7 @@ class Executor extends Service {
     constructor() {
         super("executor");
 
-        this.dependencies = [ "bot", "commands" ];
+        this.dependencies = [ "bot", "commands", "weeb" ];
         this._logger = new Logger("executor", "green");
         this._services = {};
     }

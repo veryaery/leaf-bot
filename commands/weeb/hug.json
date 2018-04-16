@@ -1,9 +1,12 @@
 {
+    "aliases": [
+        "huggle"
+    ],
     "messages": [
         "$subject hugs $object",
         "$subject huggles $object",
         "$subject gives $object a hug",
-        "$object recived a hug from $subject",
+        "$object received a hug from $subject",
         "$object is hugged by $subject",
         "$object is huggled by $subject"
     ]

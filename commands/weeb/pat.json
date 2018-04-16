@@ -1,12 +1,16 @@
 {
+    "aliases": [
+        "headpat",
+        "pet"
+    ],
     "messages": [
         "$subject pats $object",
         "$subject headpats $object",
         "$subject pets $object",
         "$subject gives $object a pat",
-        "$subject gives $object a headpats",
-        "$object recived a pat $subject",
-        "$object recived a headpat $subject",
+        "$subject gives $object a headpat",
+        "$object received a pat from $subject",
+        "$object received a headpat from $subject",
         "$object is patted by $subject",
         "$object is headpatted by $subject",
         "$object is petted by $subject"

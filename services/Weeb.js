@@ -4,10 +4,14 @@ const fs = require("fs");
 
 // communuity modules
 const Promise = require("promise");
+const xyncl = require("xyncl");
 const { Command, Argument } = require("xyncp");
+const imagemin = require("imagemin");
+const imageminGifsicle = require("imagemin-gifsicle");
 
 // imports
 const Service = require("../classes/Service.js");
+const Mention = require("../types/Mention.js");
 
 class Weeb extends Service {
 
@@ -19,19 +23,64 @@ class Weeb extends Service {
         this._services = {};
     }
 
-    _registerCommand(name) {
-        const command = new Command(name);
+    async _registerCommand(name) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const options = {};
+                options[path.join(this._directory, `${name}.json`)] = null;
+                const config = (await xyncl(options))[name];
+                const command = new Command(name)
+                    .setArgs([
+                        new Argument("object")
+                        .setType(new Mention("member"))
+                    ])
+                    .setAliases(config.aliases)
+                    .set("execute", (output, message, client) => {
+                        const directory = path.join(this._directory, name);
+                        
+                        fs.readdir(directory, (error, files) => {
+                            if (!error) {
+                                const file = path.join(directory, files[Math.floor(Math.random() * files.length)]);
+                                const textMessage = config.messages[Math.floor(Math.random() * config.messages.length)]
+                                    .split("$subject").join(message.member.displayName)
+                                    .split("$object").join(output.args.object.displayName);
+
+                                imagemin([ file ], null, [ imageminGifsicle() ]).then((files) => {
+                                    message.channel.send(textMessage, {
+                                        files: [
+                                            {
+                                                attachment: files[0].data,
+                                                name: `${name}${path.extname(file)}`
+                                            }
+                                        ]
+                                    });
+                                });
+                            }
+                        });
+                    });
+
+                this._services.commands.register("weeb", command);
+
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    _registerCommands() {
-        return new Promise((resolve, reject) => {
-            fs.readdir(this._directory, (error, files) => {
+    async _registerCommands() {
+        return new Promise(async (resolve, reject) => {
+            fs.readdir(this._directory, async (error, files) => {
                 if (error) {
                     reject(error);
                 } else {
                     for (const file of files) {
                         if (!path.extname(file)) {
-                            this._registerCommand(file);
+                            try {
+                                await this._registerCommand(file);
+                            } catch (error) {
+                                return reject(error);
+                            }
                         }
                     }
 
