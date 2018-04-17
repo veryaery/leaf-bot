@@ -1,0 +1,8 @@
+{
+    "messages": [
+        "$subject kisses $object",
+        "$subject gives $object a kiss",
+        "$object received a kiss from $subject",
+        "$object is kissed by $subject"
+    ]
+}

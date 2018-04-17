@@ -10,7 +10,7 @@ class APICaller extends Service {
         super(name);
 
         this.defaults = {
-            interval: 10000
+            interval: 5000
         };
         this._queue = [];
         this._instant = false;

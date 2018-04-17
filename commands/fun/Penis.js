@@ -17,7 +17,7 @@ class Penis extends Command {
                 .setType(new Mention("member"))
                 .setOptional(true)
         ];
-        this.aliases = [ "dick", "length", "size" ]
+        this.aliases = [ "dick", "cock", "length", "size" ]
         this._min = 2;
         this._max = 30;
         this._noise = new Noise(Math.random());

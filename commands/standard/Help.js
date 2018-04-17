@@ -12,8 +12,7 @@ class Ping extends Command {
 
         this.options = {
             "--": [
-                new Option("direct")
-                    .setAliases([ "dm", "private", "pm" ])
+                new Option("here")
             ]
         }
         this.aliases = [ "commands" ];
@@ -117,7 +116,7 @@ class Ping extends Command {
     }
 
     async execute(output, message, client) {
-        const channel = output.options.direct ? message.author : message.channel;
+        const channel = output.options.here ? message.channel : message.author;
 
         await channel.send({
             embed: new Discord.RichEmbed()
@@ -142,7 +141,7 @@ class Ping extends Command {
             });
         }
 
-        if (output.options.direct) {
+        if (!output.options.here) {
             message.channel.send("📬 help sent to your dms");
         }
     }
