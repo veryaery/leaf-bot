@@ -5,6 +5,7 @@ const path = require("path");
 // community modules
 const Promise = require("promise");
 const xyncl = require("xyncl");
+const chalk = require("chalk");
 
 // imports
 const Logger = require("./classes/Logger.js");
@@ -68,15 +69,18 @@ async function load() {
             const promises = [];
 
             for (const service of rank) {
+                let config = {};
+
                 if (service.defaults) {
                     const options = {};
                     options[`configs/${service.name}.json`] = service.defaults;
-                    const config = (await xyncl(options))[service.name];
-
-                    promises.push(service.load(config));
-                } else {
-                    promises.push(service.load());
+                    config = (await xyncl(options))[service.name];
                 }
+                
+                promises.push(service.load(config).catch((error) => {
+                    logger.logRaw(chalk.red(`error in ${service.name}`));
+                    console.error(error);
+                }));
             }
 
             await Promise.all(promises);

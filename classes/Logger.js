@@ -27,10 +27,15 @@ class Logger {
         console.log(chalk[this._color](`[${this._name}]`), message);
     }
 
+    logRaw(message) {
+        console.log(chalk[this._color](`[${this._name}]`), message);
+    }
+
 }
 
 Logger.normal = chalk.gray;
 Logger.highlight = chalk.white;
+Logger.error = chalk.red;
 
 // exports
 module.exports = Logger;

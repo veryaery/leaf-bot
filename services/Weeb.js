@@ -36,26 +36,34 @@ class Weeb extends Service {
                     ])
                     .setAliases(config.aliases)
                     .set("execute", (output, message, client) => {
-                        const directory = path.join(this._directory, name);
+                        return new Promise((resolve, reject) => {
+                            const directory = path.join(this._directory, name);
                         
-                        fs.readdir(directory, (error, files) => {
-                            if (!error) {
-                                const file = path.join(directory, files[Math.floor(Math.random() * files.length)]);
-                                const textMessage = config.messages[Math.floor(Math.random() * config.messages.length)]
-                                    .split("$subject").join(message.member.displayName)
-                                    .split("$object").join(output.args.object.displayName);
+                            fs.readdir(directory, (error, files) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    const file = path.join(directory, files[Math.floor(Math.random() * files.length)]);
+                                    const textMessage = config.messages[Math.floor(Math.random() * config.messages.length)]
+                                        .split("$subject").join(message.member.displayName)
+                                        .split("$object").join(output.args.object.displayName);
 
-                                imagemin([ file ], null, [ imageminGifsicle() ]).then((files) => {
-                                    message.channel.send(textMessage, {
-                                        files: [
-                                            {
-                                                attachment: files[0].data,
-                                                name: `${name}${path.extname(file)}`
-                                            }
-                                        ]
-                                    });
-                                });
-                            }
+                                    imagemin([ file ], null, [ imageminGifsicle() ])
+                                        .then((files) => {
+                                            message.channel.send(textMessage, {
+                                                files: [
+                                                    {
+                                                        attachment: files[0].data,
+                                                        name: `${name}${path.extname(file)}`
+                                                    }
+                                                ]
+                                            })
+                                                .then((message) => resolve())
+                                                .catch(reject);
+                                        })
+                                        .catch(reject);
+                                }
+                            });
                         });
                     });
 

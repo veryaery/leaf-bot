@@ -1,5 +1,6 @@
 // community modules
 const { Command, Argument, types } = require("xyncp");
+const Promise = require("promise");
 
 class Poll extends Command {
 
@@ -23,21 +24,26 @@ class Poll extends Command {
     }
 
     async execute(output, message, client) {
-        const options = [];
+        return new Promise((resolve, reject) => {
+            const options = [];
+    
+            for (let i = 0; i < output.args.options.length; i++) {
+                const option = output.args.options[i];
+                const emoji = this._emojis[i + 1];
+    
+                options.push(`${emoji} ${option}`);
+            }
+    
+            message.channel.send(`${output.args.title}\n\n${options.join("\n")}`)
+                .then(async (message) => {
+                    for (let i = 0; i < output.args.options.length; i++) {
+                        await message.react(`${i + 1}%E2%83%A3`);
+                    }
 
-        for (let i = 0; i < output.args.options.length; i++) {
-            const option = output.args.options[i];
-            const emoji = this._emojis[i + 1];
-
-            options.push(`${emoji} ${option}`);
-        }
-
-        message.channel.send(`${output.args.title}\n\n${options.join("\n")}`)
-            .then(async (message) => {
-                for (let i = 0; i < output.args.options.length; i++) {
-                    await message.react(`${i + 1}%E2%83%A3`);
-                }
-            });
+                    resolve();
+                })
+                .catch(reject);
+        });
     }
 
 }

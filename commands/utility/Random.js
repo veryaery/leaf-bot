@@ -1,5 +1,6 @@
 // community modules
 const { Command, Option, Argument, types } = require("xyncp");
+const Promise = require("promise");
 
 class Random extends Command {
 
@@ -31,16 +32,24 @@ class Random extends Command {
     }
 
     execute(output, message, client) {
-        const count = output.options.count ? output.options.count.count : 1;
-        const values = [];
-
-        for (let i = 0; i < count; i++) {
-            const value = (Math.random() * ((output.args.max + 1) - output.args.min)) + output.args.min;
-
-            values.push(output.options.float ? value : Math.floor(value));
-        }
-
-        message.channel.send(values.join("\n"));
+        return new Promise((resolve, reject) => {
+            if (output.args.max <= output.args.min) {
+                return resolve(new Error("max must be higher than min"));
+            }
+    
+            const count = output.options.count ? output.options.count.count : 1;
+            const values = [];
+    
+            for (let i = 0; i < count; i++) {
+                const value = (Math.random() * ((output.args.max + 1) - output.args.min)) + output.args.min;
+    
+                values.push(output.options.float ? value : Math.floor(value));
+            }
+    
+            message.channel.send(values.join("\n"))
+                .then((message) => resolve())
+                .catch(reject);
+        });
     }
 
 }

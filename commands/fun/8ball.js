@@ -1,5 +1,6 @@
 // community modules
 const { Command, Argument, types } = require("xyncp");
+const Promise = require("promise");
 
 class Ball extends Command {
 
@@ -22,7 +23,11 @@ class Ball extends Command {
     }
 
     execute(output, message, client) {
-        message.channel.send(`🎱 ${this._fortunes[Math.floor(Math.random() * this._fortunes.length)]}`);
+        return new Promise((resolve, reject) => {
+            message.channel.send(`🎱 ${this._fortunes[Math.floor(Math.random() * this._fortunes.length)]}`)
+                .then((message) => resolve())
+                .catch(reject);
+        });
     }
 
 }

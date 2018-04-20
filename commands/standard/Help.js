@@ -1,5 +1,6 @@
 // community modules
 const { Command, Option } = require("xyncp");
+const Promise = require("promise");
 const Discord = require("discord.js");
 
 // imports
@@ -116,34 +117,38 @@ class Ping extends Command {
     }
 
     async execute(output, message, client) {
-        const channel = output.options.here ? message.channel : message.author;
-
-        await channel.send({
-            embed: new Discord.RichEmbed()
-                .setTitle("leaf")
-                .setDescription("hi~!\n\ni'm leaf, a private discord bot developed by xynfa\n\nyou can view my source code at my [github repository](https://github.com/xynfa/leaf-bot)")
-                .setFooter("(required) [optional]")
-                .setThumbnail(client.user.displayAvatarURL)
-                .setColor(0x00ff99)
-        });
-
-        let hue = Math.random();
-
-        for (const catagory of Object.values(commands.catagories).sort((x, y) => x.position - y.position)) {
-            hue = (hue + this._step) % 1;
-            const color = this._HSLToRGB(hue, this._saturation, this._lightness).map((x) => Math.floor(x).toString(16).padStart(2, "0"));
-
+        return new Promise(async (resolve, reject) => {
+            const channel = output.options.here ? message.channel : message.author;
+    
             await channel.send({
                 embed: new Discord.RichEmbed()
-                    .setTitle(catagory.name)
-                    .setDescription(`${catagory.description}\n\n${this._stringify(catagory.commands).join("\n")}`)
-                    .setColor(`#${color[0]}${color[1]}${color[2]}`)
-            });
-        }
-
-        if (!output.options.here) {
-            message.channel.send("📬 help sent to your dms");
-        }
+                    .setTitle("leaf")
+                    .setDescription("hi~!\n\ni'm leaf, a private discord bot developed by xynfa")
+                    .setThumbnail(client.user.displayAvatarURL)
+                    .setFooter("avatar by SaltedPotato on deviantart")
+                    .setColor(0x00ff99)
+            }).catch(reject);
+    
+            let hue = Math.random();
+    
+            for (const catagory of Object.values(commands.catagories).sort((x, y) => x.position - y.position)) {
+                hue = (hue + this._step) % 1;
+                const color = this._HSLToRGB(hue, this._saturation, this._lightness).map((x) => Math.floor(x).toString(16).padStart(2, "0"));
+    
+                await channel.send({
+                    embed: new Discord.RichEmbed()
+                        .setTitle(catagory.name)
+                        .setDescription(`${catagory.description}\n\n${this._stringify(catagory.commands).join("\n")}`)
+                        .setColor(`#${color[0]}${color[1]}${color[2]}`)
+                }).catch(reject);
+            }
+    
+            resolve();
+    
+            if (!output.options.here) {
+                message.channel.send("📬 help sent to your dms");
+            }
+        });
     }
 
 }

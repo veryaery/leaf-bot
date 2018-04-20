@@ -1,5 +1,6 @@
 // community modules
 const { Command } = require("xyncp");
+const Promise = require("promise");
 
 class Ping extends Command {
 
@@ -8,12 +9,17 @@ class Ping extends Command {
     }
 
     execute(output, message, client) {
-        const past = Date.now();
-
-        message.channel.send("🏓 ping")
-            .then((message) => {
-                message.edit(`🏓 pong\n\nwebsocket: \`${Math.round(client.ping)}ms\`\nrest: \`${Date.now() - past}ms\``)
-            });
+        return new Promise((resolve, reject) => {
+            const past = Date.now();
+    
+            message.channel.send("🏓 ping")
+                .then((message) => {
+                    message.edit(`🏓 pong\n\nwebsocket: \`${Math.round(client.ping)}ms\`\nrest: \`${Date.now() - past}ms\``)
+                        .then((message) => resolve())
+                        .catch(reject);
+                })
+                .catch(reject);
+        });
     }
 
 }

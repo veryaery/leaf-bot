@@ -4,6 +4,7 @@ const path = require("path");
 
 // community modules
 const { Command, Argument, types } = require("xyncp");
+const Promise = require("promise");
 const Discord = require("discord.js");
 
 // imports
@@ -19,10 +20,11 @@ class Rule34 extends Command {
                 .setType(new types.List(new types.Str()))
         ];
         this.aliases = [ "r34" ];
+        this.nsfw = true;
     }
 
     async execute(output, message, client) {
-        if (message.channel.nsfw) {
+        return new Promise((resolve, reject) => {
             rule34Caller.queue({
                 tags: output.args.tags
             }).then(async (call) => {
@@ -43,15 +45,15 @@ class Rule34 extends Command {
                             }
                         ]
                     })
+                        .then((message) => resolve())
+                        .catch(reject);
 
                     if (queueMessage) {
                         queueMessage.delete();
                     }
                 });
-            });
-        } else {
-            message.channel.send("this channel is not nsfw");
-        }
+            }).catch(reject);
+        });
     }
 
 }

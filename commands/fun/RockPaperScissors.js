@@ -1,5 +1,6 @@
 // community modules
 const { Command, Argument, types } = require("xyncp");
+const Promise = require("promise");
 
 class RockPaperScissors extends Command {
 
@@ -24,18 +25,25 @@ class RockPaperScissors extends Command {
     }
 
     execute(output, message, client) {
-        const botChoice = Math.floor(Math.random() * 3);
-        const playerChoice = this._values[output.args.choice];
-        const botEmoji = this._emojis[botChoice];
-        const playerEmoji = this._emojis[playerChoice];
+        return new Promise((resolve, reject) => {
+            const botChoice = Math.floor(Math.random() * 3);
+            const playerChoice = this._values[output.args.choice];
+            const botEmoji = this._emojis[botChoice];
+            const playerEmoji = this._emojis[playerChoice];
+            let resultMessage = "";
+    
+            if ((botChoice + 1) % 3 == playerChoice) {
+                resultMessage = "you win";
+            } else if ((playerChoice + 1) % 3 == botChoice) {
+                resultMessage = "you lose";
+            } else {
+                resultMessage = "we tie";
+            }
 
-        if ((botChoice + 1) % 3 == playerChoice) {
-            message.channel.send(`${playerEmoji}💥${botEmoji} you win`);
-        } else if ((playerChoice + 1) % 3 == botChoice) {
-            message.channel.send(`${playerEmoji}💥${botEmoji} you lose`);
-        } else {
-            message.channel.send(`${playerEmoji}💥${botEmoji} we tie`);
-        }
+            message.channel.send(`${playerEmoji}💥${botEmoji} ${resultMessage}`)
+                .then((message) => resolve())
+                .catch(reject);
+        });
     }
 
 }

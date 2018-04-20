@@ -4,6 +4,7 @@ const path = require("path");
 
 // community modules
 const { Command, Argument, types } = require("xyncp");
+const Promise = require("promise");
 const Discord = require("discord.js");
 
 // imports
@@ -23,15 +24,19 @@ class Avatar extends Command {
     }
 
     execute(output, message, client) {
-        const member = output.args.member || message.member;
+        return new Promise((resolve, reject) => {
+            const member = output.args.member || message.member;
 
-        message.channel.send({
-            files: [
-                {
-                    attachment: member.user.displayAvatarURL,
-                    name: `${member.displayName}${path.extname(url.parse(member.user.displayAvatarURL).pathname)}`
-                }
-            ]
+            message.channel.send({
+                files: [
+                    {
+                        attachment: member.user.displayAvatarURL,
+                        name: `${member.displayName}${path.extname(url.parse(member.user.displayAvatarURL).pathname)}`
+                    }
+                ]
+            })
+                .then((message) => resolve())
+                .catch(reject);
         });
     }
 

@@ -13,7 +13,12 @@ class Bot extends Service {
 
         this.dependencies = [ "commands" ];
         this.defaults = {
-            token: ""
+            token: "",
+            game: {
+                name: "",
+                type: "PLAYING",
+                url: ""
+            }
         };
         this._logger = new Logger("bot", "magenta");
         this.client = null;
@@ -24,9 +29,12 @@ class Bot extends Service {
             const client = new Discord.Client();
     
             client.on("ready", () => {
-                this._logger.log("ready");
-
                 this.client = client;
+
+                this._logger.log("ready");
+                client.user.setPresence({
+                    game: config.game
+                });
 
                 resolve();
             });
